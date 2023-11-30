@@ -13,7 +13,7 @@
       <div class="container">
         <div class="flex">
           <a class="header-logo" href="index.html">
-            <img src="src/images/logo.svg" alt="logo" />
+            <img src="" alt="logo" />
           </a>
 
           <nav class="header-nav">
@@ -126,11 +126,11 @@
           <!-- Компонент степпер  -->
           <div class="counter">
             <label class="counter__field">
-              <input autocomplete="off" class="counter__input" type="text" value="1" maxlength="3" readonly />
+              <input class="counter__input" type="text" value="1" maxlength="3" readonly />
               <span class="counter__text">шт</span>
             </label>
             <div class="counter__btns">
-              <button type="button" class="counter__btn counter__btn--up" aria-label="Увеличить количество">
+              <button class="counter__btn counter__btn--up" aria-label="Увеличить количество">
                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
                   <g>
                     <g>
@@ -139,7 +139,7 @@
                   </g>
                 </svg>
               </button>
-              <button type="button" disabled class="counter__btn counter__btn--down" aria-label="Уменьшить количество">
+              <button disabled class="counter__btn counter__btn--down" aria-label="Уменьшить количество">
                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
                   <g>
                     <g>
@@ -149,6 +149,29 @@
                 </svg>
               </button>
             </div>
+          </div>
+
+          <!-- Форма создания товара  -->
+          <div class="form-container">
+            <h2>Add Product</h2>
+            <form id="productForm">
+              <label for="productName">Name*</label>
+              <input autocomplete="off" type="text" id="productName" name="name" required />
+
+              <label for="productCategory">Category* </label>
+              <input autocomplete="off" type="text" id="productCategory" name="category" required />
+
+              <label for="productRating">Rating*</label>
+              <input autocomplete="off" type="text" id="productRating" name="rating" required />
+
+              <label for="productPrice">Price*</label>
+              <input autocomplete="off" type="text" id="productPrice" name="price" required />
+
+              <label for="productImgSrc">Image Source</label>
+              <input autocomplete="off" type="url" id="productImgSrc" name="imgSrc" required />
+
+              <button type="submit">Add Product</button>
+            </form>
           </div>
 
           <div class="products-list">
