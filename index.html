@@ -76,47 +76,33 @@
               </svg>
               <span class="basket-count__info"></span>
             </button>
-
-            <dialog class="modal" id="modal-basket">
-              <header class="modal-header">
-                <button id="close-button" class="button close-button">
-                  <svg
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="presentation"
-                    focusable="false"
-                    style="
-                      display: block;
-                      fill: none;
-                      height: 16px;
-                      width: 16px;
-                      stroke: currentcolor;
-                      stroke-width: 3;
-                      overflow: visible;
-                    "
-                  >
-                    <path d="m6 6 20 20"></path>
-                    <path d="m26 6-20 20"></path>
-                  </svg>
-                </button>
-              </header>
-
-              <section class="modal-body">
-                <h2 class="modal-body__total">Total: $</h2>
-                <span class="basket__total-value"></span>
-
-                <div class="basket-container__list">
-                  <!-- вставка добавленного товара  -->
-                </div>
-              </section>
-
-              <footer class="modal-footer"></footer>
-            </dialog>
           </div>
         </div>
       </div>
     </header>
+
+    <!-- Сайдбар для истории  -->
+    <dialog class="sidebar" id="sidebar">
+      <div class="sidebar-wrapper">
+        <header>
+          <h2 class="sidebar-title">Added products</h2>
+          <div class="btn-icon" id="close-sidebar">
+            <svg width="12" height="12" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M8 0.7L7.3 0L4 3.3L0.7 0L0 0.7L3.3 4L0 7.3L0.7 8L4 4.7L7.3 8L8 7.3L4.7 4L8 0.7Z"
+                fill="#161616"
+              />
+            </svg>
+          </div>
+        </header>
+        <!-- Для отображения добавленных товаров -->
+        <section>
+          <ul id="products-list"></ul>
+        </section>
+      </div>
+    </dialog>
 
     <main>
       <section class="products p-48">
@@ -182,6 +168,5 @@
     </main>
 
     <script type="module" src="src/js/script.js"></script>
-    <script src="src/js/counter.js"></script>
   </body>
 </html>

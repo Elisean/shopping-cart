@@ -1,4 +1,11 @@
-// your code
+import { Sidebar } from './components/sidebar'
+
+// первый параметр - сайдбар,
+// второй - кнопка по клику на которую открывается сайдбар,
+// третий положение сайдбара (если не передан, то по умолчанию 'left'
+const panel = new Sidebar('#sidebar', '#open-basket', 'right')
+console.log('panel', panel)
+
 const productList = document.querySelector('.products-list') // контейнер для отрисовки товаров
 
 loadJSON()
