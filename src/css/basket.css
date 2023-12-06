@@ -46,6 +46,7 @@
   margin-bottom: 8px;
   padding: 8px;
   border: 1px solid #000;
+  max-height: 300px;
 }
 
 .item-image {
@@ -54,7 +55,7 @@
 
 .item-image img {
   max-width: 100%;
-  min-height: 240px;
+  /* min-height: 240px; */
   object-fit: cover;
 }
 
@@ -75,4 +76,8 @@
   max-width: 100%;
   width: 14px;
   height: 14px;
+}
+
+.gap {
+  gap: 14px;
 }
