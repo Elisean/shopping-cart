@@ -1,4 +1,6 @@
 import { Sidebar } from './components/sidebar'
+import { nanoid } from 'nanoid'
+import { Notification } from './components/notification'
 
 // первый параметр - сайдбар,
 // второй - кнопка по клику на которую открывается сайдбар,
@@ -6,18 +8,21 @@ import { Sidebar } from './components/sidebar'
 const panel = new Sidebar('#sidebar', '#open-basket', 'right')
 const form = document.querySelector('#productForm')
 const productList = document.querySelector('.products-list') // контейнер для отрисовки товаров на главной странице
+const basketItemList = document.querySelector('#basket-list') // контейнер для отрисовки товаров в корзине
 
 // Функция для инициализации основных функций и т.д.
-const init = async () => {
+const init = () => {
   window.addEventListener('DOMContentLoaded', async () => {
-    await loadJSON() // функция загрузки данных
+    await loadJSON() // асинхронная функция загрузки данных (код будет ждать, пока эта функция завершится)
+
+    loadCart() // функция загрузки данных в корзину товаров
 
     // Обработка данных формы
     form.addEventListener('submit', (e) => {
       e.preventDefault() // иначе форма отправится синхронно. Это приведет к перезапуску страницы, а значит, метод addProduct не успеет выполниться.
       addProduct()
     })
-    await purchaseProduct()
+    purchaseProduct()
     // productList.addEventListener('click', purchaseProduct) // добавление товара в корзину ?
   })
 }
@@ -82,7 +87,10 @@ async function loadJSON() {
 
 // Функция создания товара через форму
 const addProduct = async () => {
-  const productData = {} // отдельная сущность товара
+  // отдельная сущность товара
+  const productData = {
+    id: nanoid(),
+  }
 
   // собираем данные из формы
   Array.from(form?.elements).forEach((element) => {
@@ -101,7 +109,12 @@ const addProduct = async () => {
     })
 
     if (response.ok) {
-      console.log('Product added successfully!')
+      const notificationInfo = new Notification({
+        variant: 'green',
+        title: 'Добавление товара:',
+        subtitle: 'Товар был добавлен на страницу',
+      })
+
       form.reset()
       loadJSON() // показываем актуальные данные
     } else {
@@ -124,18 +137,99 @@ function purchaseProduct() {
 // Функция извлечения данных из карточки на главной странице
 function getProductInfo(product) {
   const productInfo = {
-    id: product?.querySelector('.main-card')?.dataset?.сardId ?? '',
+    id: product?.dataset.cardId ?? '',
     imgSrc: product?.querySelector('.card-image img')?.src ?? '',
     name: product?.querySelector('.card-name')?.textContent ?? '',
     category: product?.querySelector('.card-category')?.textContent ?? '',
     price: product?.querySelector('.card-price')?.textContent ?? '',
   }
 
-  addProductsToBasketList(productInfo)
+  addProductsToBasketList(productInfo) // добавление товара в корзину
+  const notificationInfo = new Notification({
+    variant: 'green',
+    title: 'Добавление товара:',
+    subtitle: 'Товар был добавлен в корзину',
+  })
+  saveProductInStorage(productInfo) // запись товара в localStorage
 }
 
-function addProductsToBasketList(basketItem) {
-  console.log(basketItem)
+// Функция добавления товаров в корзину
+function addProductsToBasketList(product) {
+  const basketItem = document.createElement('div')
 
-  // рисуем данные с сайдбаре
+  basketItem.classList.add('basket-item')
+
+  basketItem.setAttribute('data-id', `${product?.id}`)
+
+  basketItem.innerHTML = `
+    <div class="item-card">
+      <div class="item-image">
+        <img src="${product?.imgSrc}" alt="product image">
+      </div>
+      <div class="inline-flex flex-column gap">
+        <h3 class="item-name">${product?.name}</h3>
+        <p class="item-category">${product?.category}</p>
+        <!-- Компонент степпер  -->
+          <div class="counter">
+            <label class="counter__field">
+              <input class="counter__input" type="text" value="1" maxlength="3" readonly />
+              <span class="counter__text">шт</span>
+            </label>
+            <div class="counter__btns">
+              <button class="counter__btn counter__btn--up" aria-label="Увеличить количество">
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
+                  <g>
+                    <g>
+                      <path d="M3.904-.035L-.003 3.151 1.02 5.03l2.988-2.387 2.988 2.387 1.022-1.88-3.89-3.186z"></path>
+                    </g>
+                  </g>
+                </svg>
+              </button>
+              <button disabled class="counter__btn counter__btn--down" aria-label="Уменьшить количество">
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="5" viewBox="0 0 8 5">
+                  <g>
+                    <g>
+                      <path d="M3.904 5.003L-.003 1.818 1.02-.062l2.988 2.386L6.995-.063l1.022 1.88-3.89 3.186z"></path>
+                    </g>
+                  </g>
+                </svg>
+              </button>
+            </div>
+          </div>
+        <button id="delete-icon" class="button close-button">
+          Remove
+          <img src="src/images/delete-icon.svg" alt="delete-icon">
+        </button>
+      </div>
+      <div class="inline-flex">
+        <p class="item-price">${product?.price}</p>
+      </div>
+    </div>
+  `
+
+  basketItemList.appendChild(basketItem) // вставляем карточку в узел родителя
+}
+
+// Функция загрузки данных из localStorage в корзину товаров
+function loadCart() {
+  const elements = getProductFromStorage()
+
+  elements.forEach((element) => addProductsToBasketList(element))
+}
+
+// Функция для сохранения в localStorage
+function saveProductInStorage(product) {
+  const products = getProductFromStorage()
+
+  products.push(product)
+
+  localStorage.setItem('products', JSON.stringify(products)) // запись данных в localStorage
+
+  // updateCartInfo() // показ актуальной информации в корзине
+}
+
+// Функция для получения данных из localStorage
+function getProductFromStorage() {
+  // если данных нет, показываем []
+  return localStorage.getItem('products') ? JSON.parse(localStorage.getItem('products')) : []
 }
