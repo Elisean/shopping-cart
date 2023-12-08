@@ -70,9 +70,9 @@ export class Notification {
       document.body.appendChild(this.container)
 
       // Автоматическое закрытие через 2 секунды
-      // setTimeout(() => {
-      //   this.closeNotification()
-      // }, 2000)
+      setTimeout(() => {
+        this.closeNotification()
+      }, 2000)
     }, 1000)
   }
 

@@ -9,6 +9,8 @@ const panel = new Sidebar('#sidebar', '#open-basket', 'right')
 const form = document.querySelector('#productForm')
 const productList = document.querySelector('.products-list') // контейнер для отрисовки товаров на главной странице
 const basketItemList = document.querySelector('#basket-list') // контейнер для отрисовки товаров в корзине
+const basketTotalValue = document.querySelector('.basket__total-value') // итоговое значение в корзине
+const basketCountInfo = document.querySelector('.basket-count__info') // кол-во товаров (в кнопке basket)
 
 // Функция для инициализации основных функций и т.д.
 const init = () => {
@@ -221,11 +223,36 @@ function addProductsToBasketList(product) {
   })
 }
 
+// Счетчик корзины
+function updateCartInfo() {
+  const cartInfo = findCartInfo() // получение данных о товарах
+
+  basketCountInfo.textContent = cartInfo.productCount
+  basketTotalValue.textContent = cartInfo.total // передаем данные в модалку (заголовок total)
+}
+
+// Итоговая функция (total) и кол-во товаров в сайдбаре
+function findCartInfo() {
+  const products = getProductFromStorage() // получение данных
+
+  const total = products.reduce((acc, product) => {
+    const price = Number.parseFloat(product.price, 10)
+    return (acc += price)
+  }, 0)
+
+  return {
+    total: total?.toFixed(2),
+    productCount: products?.length,
+  }
+}
+
 // Функция загрузки данных из localStorage в корзину товаров
 function loadCart() {
   const elements = getProductFromStorage()
 
   elements.forEach((element) => addProductsToBasketList(element))
+
+  updateCartInfo() // показ счетчика в корзине
 }
 
 // Функция удаления товара из DOM
@@ -250,6 +277,8 @@ function deleteProduct(e) {
   })
 
   localStorage.setItem('products', JSON.stringify(updateProducts)) // перезапись данных в LocalStorage
+
+  updateCartInfo()
 }
 
 // Функция для сохранения в localStorage
@@ -259,6 +288,8 @@ function saveProductInStorage(product) {
   products.push(product)
 
   localStorage.setItem('products', JSON.stringify(products)) // запись данных в localStorage
+
+  updateCartInfo() // показ новых данных в корзине
 }
 
 // Функция для получения данных из localStorage
