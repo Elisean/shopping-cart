@@ -1,22 +1,22 @@
 .notification {
-  --notification-background-green: #defbe6;
-  --notification-color: #393939;
+  --notification-background: #fff1f1;
+  --notification-color: #161616;
 
   width: 560px;
-  background-color: var(--notification-background-green);
+  background-color: transparent;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 14px;
   line-height: 18px; /* 128.571% */
   letter-spacing: 0.16px;
   color: var(--notification-color);
-  border: 1px solid var(--notification-background-green);
-  border-left: 3px solid var(--notification-background-green);
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
   padding-left: 16px;
   display: flex;
   align-items: center;
   position: absolute;
-  bottom: 16px;
-  left: 16px;
+  bottom: 20px;
+  left: 20px;
   max-height: 48px;
 }
 
@@ -51,53 +51,34 @@
   fill: var(--notification-color);
 }
 
-.border-blue {
-  border: 1px solid #4589ff;
-  border-left: 3px solid #4589ff;
-}
+.notification-information {
+  --notification-background-blue: #edf5ff;
 
-.border-green {
-  border: 1px solid #42be65;
-  border-left: 3px solid #42be65;
-}
-
-.border-yellow {
-  border: 1px solid #f1c21b;
-  border-left: 3px solid #f1c21b;
-}
-
-.notification-low-contrast {
-  width: 560px;
-  background-color: var(--notification-background);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 14px;
-  line-height: 18px; /* 128.571% */
-  letter-spacing: 0.16px;
-  color: var(--notification-color);
-  border: 1px solid #fa4d56;
-  border-left: 3px solid #fa4d56;
-  padding-left: 16px;
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-bottom: 20px;
-  max-height: 48px;
-}
-
-.notification-low-blue {
   border: 1px solid #4589ff;
   border-left: 3px solid #4589ff;
   background-color: var(--notification-background-blue);
 }
 
-.notification-low-green {
+.notification-success {
+  --notification-background-green: #defbe6;
+
   border: 1px solid #42be65;
   border-left: 3px solid #42be65;
   background-color: var(--notification-background-green);
 }
 
-.notification-low-yellow {
+.notification-warning {
+  --notification-background-yellow: #fff8e1;
+
   border: 1px solid #f1c21b;
   border-left: 3px solid #f1c21b;
   background-color: var(--notification-background-yellow);
+}
+
+.notification-error {
+  --notification-background-danger: #fff1f1;
+
+  border: 1px solid #e74c3c;
+  border-left: 3px solid #e74c3c;
+  background-color: var(--notification-background-danger);
 }
