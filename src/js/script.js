@@ -23,7 +23,6 @@ const init = () => {
       addProduct()
     })
     purchaseProduct()
-    // productList.addEventListener('click', purchaseProduct) // добавление товара в корзину ?
   })
 }
 
@@ -79,6 +78,8 @@ async function loadJSON() {
           `
       })
     }
+    productList.innerHTML = ''
+
     productList.insertAdjacentHTML('beforeend', html)
   } catch (error) {
     console.error('Ошибка загрузки данных:', error)
@@ -136,9 +137,12 @@ function purchaseProduct() {
 
 // Функция извлечения данных из карточки на главной странице
 function getProductInfo(product) {
+  const imgElement = product?.querySelector('.card-image img')
+  const imgSrc = imgElement ? new URL(imgElement.src).pathname : '' // для преобразования относительного пути в абсолютный
+
   const productInfo = {
     id: product?.dataset.cardId ?? '',
-    imgSrc: product?.querySelector('.card-image img')?.src ?? '',
+    imgSrc: imgSrc,
     name: product?.querySelector('.card-name')?.textContent ?? '',
     category: product?.querySelector('.card-category')?.textContent ?? '',
     price: product?.querySelector('.card-price')?.textContent ?? '',
@@ -146,7 +150,7 @@ function getProductInfo(product) {
 
   addProductsToBasketList(productInfo) // добавление товара в корзину
   const notificationInfo = new Notification({
-    variant: 'green',
+    variant: 'success',
     title: 'Добавление товара:',
     subtitle: 'Товар был добавлен в корзину',
   })
@@ -208,6 +212,13 @@ function addProductsToBasketList(product) {
   `
 
   basketItemList.appendChild(basketItem) // вставляем карточку в узел родителя
+
+  // Need to fix
+  const deleteButtons = document.querySelectorAll('#delete-icon')
+
+  deleteButtons.forEach((deleteButton) => {
+    deleteButton.addEventListener('click', deleteProduct) // передача функции удаления
+  })
 }
 
 // Функция загрузки данных из localStorage в корзину товаров
@@ -217,6 +228,30 @@ function loadCart() {
   elements.forEach((element) => addProductsToBasketList(element))
 }
 
+// Функция удаления товара из DOM
+function deleteProduct(e) {
+  let basketItem
+
+  if (e.target.tagName === 'BUTTON') {
+    basketItem = e?.target?.parentElement?.parentElement?.parentElement // получаем родителя
+    basketItem.remove() // удаление из DOM
+  }
+
+  const notificationInfo = new Notification({
+    variant: 'success',
+    title: 'Удаление товара:',
+    subtitle: 'Товар был удален из корзины',
+  })
+
+  const products = getProductFromStorage() // получение данных из localStorage
+
+  const updateProducts = products.filter((product) => {
+    return product.id !== basketItem.dataset.id
+  })
+
+  localStorage.setItem('products', JSON.stringify(updateProducts)) // перезапись данных в LocalStorage
+}
+
 // Функция для сохранения в localStorage
 function saveProductInStorage(product) {
   const products = getProductFromStorage()
@@ -224,8 +259,6 @@ function saveProductInStorage(product) {
   products.push(product)
 
   localStorage.setItem('products', JSON.stringify(products)) // запись данных в localStorage
-
-  // updateCartInfo() // показ актуальной информации в корзине
 }
 
 // Функция для получения данных из localStorage
