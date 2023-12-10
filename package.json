@@ -23,6 +23,7 @@
     "vite": "4.3.9"
   },
   "scripts": {
+    "server" : "json-server --watch db.json",
     "dev": "vite --port 3006",
     "build": "vite build",
     "lint": "eslint src/**/*.js",

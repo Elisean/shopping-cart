@@ -19,22 +19,6 @@ counterBtnDown.addEventListener('click', () => {
   updateCounterState()
 })
 
-// Обновление состояния счетчика
-// function updateCounterState() {
-//   if (COUNT === 1) {
-//     counterBtnDown.setAttribute('disabled', '')
-//   } else {
-//     counterBtnDown.removeAttribute('disabled')
-//   }
-
-//   if (COUNT === 10) {
-//     counterBtnUp.setAttribute('disabled', '')
-//   } else {
-//     counterBtnUp.removeAttribute('disabled')
-//   }
-
-//   counterInput.value = COUNT
-// }
 function updateCounterState() {
   counterBtnDown.toggleAttribute('disabled', COUNT === 1)
   counterBtnUp.toggleAttribute('disabled', COUNT === 10)
